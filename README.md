@@ -5,5 +5,5 @@ Uses PM2 to run and manage the server.
 
 References: 
 [discord.js](https://discord.js.org/)
-[discord.dev] (https://discord.com/developers/docs/intro)
+[discord.dev](https://discord.com/developers/docs/intro)
 
