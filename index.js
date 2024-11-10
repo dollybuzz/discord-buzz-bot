@@ -3,6 +3,8 @@
 //To view logs in terminal: pm2 logs qotw
 
 require('dotenv').config();
+const express = require("express");
+const app = express();
 const { Client, GatewayIntentBits, SlashCommandBuilder } = require('discord.js');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10');
@@ -150,4 +152,9 @@ client.on('interactionCreate', async interaction => {
 });
 
 client.login(process.env.DISCORD_TOKEN);
+
+//server listener
+app.listen(process.env.PORT, process.env.IP, function() {
+    console.log("Running Express Server...");
+});
 
