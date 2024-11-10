@@ -2,7 +2,7 @@
 //To view status in terminal: pm2 status
 //To view logs in terminal: pm2 logs qotw
 
-const {token} = require("./config.json")
+require('dotenv').config();
 const { Client, GatewayIntentBits, SlashCommandBuilder } = require('discord.js');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10');
@@ -131,7 +131,7 @@ client.once('ready', async () => {
             .setDescription('Get the question of the week'),
     ].map(command => command.toJSON());
 
-    const rest = new REST({ version: '10' }).setToken(token);
+    const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
     try {
         await rest.put(
             Routes.applicationGuildCommands(client.user.id, '1299486412609163325'),
@@ -149,5 +149,5 @@ client.on('interactionCreate', async interaction => {
     await interaction.reply(`Question of the Week: ${questionData.currentQuestion}`);
 });
 
-client.login(token);
+client.login(process.env.DISCORD_TOKEN);
 
