@@ -1,9 +1,7 @@
-# QOTWdiscordBot
-Custom discord bot to ask a random question of the week.
-Entirety of logic produced by ChatGPT as a hobby project. 
-Uses PM2 to run and manage the server.
+# BuzzBot
 
-References: 
+BuzzBot brings your community to life with fun, thought-provoking weekly questions! Post automatically or by command, and get everyone chatting, sharing, and connecting. Easy to set up and privacy-friendly, QOTW is the ultimate way to keep your server buzzing with fresh conversations!
+
+References:
 [discord.js](https://discord.js.org/)
 [discord.dev](https://discord.com/developers/docs/intro)
-
