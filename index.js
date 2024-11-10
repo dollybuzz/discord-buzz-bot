@@ -134,7 +134,7 @@ client.once('ready', async () => {
     const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
     try {
         await rest.put(
-            Routes.applicationGuildCommands(client.user.id, '1299486412609163325'),
+            Routes.applicationGuildCommands(client.user.id, process.env.GUILD_ID),
             { body: commands }
         );
         console.log('Successfully registered application commands.');
