@@ -1,3 +1,7 @@
+//Custom discord bot to ask a random question of the week.
+//To view status in terminal: pm2 status
+//To view logs in terminal: pm2 logs qotw
+
 const {token} = require("./config.json")
 const { Client, GatewayIntentBits, SlashCommandBuilder } = require('discord.js');
 const { REST } = require('@discordjs/rest');
