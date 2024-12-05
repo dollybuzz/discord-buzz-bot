@@ -10,22 +10,6 @@ const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10');
 const { scheduleJob } = require('node-schedule');
 const fs = require('fs');
-const path = require('path');
-
-// Path to questionData.json
-const dataDirectory = path.join(__dirname, '/Users/dollybuzz/VSC/discordbot/questionData.json');
-const filePath = path.join(dataDirectory,'questionData.json');
-
-// Log the content when the bot starts
-fs.readFile(filePath, 'utf-8', (err, data) => {
-  if (err) {
-    console.error('Error reading questionData.json:', err);
-    console.log("filepath: " + filePath);
-  } else {
-    console.log('Question Data:', JSON.parse(data));
-  }
-});
-
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
