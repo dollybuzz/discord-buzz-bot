@@ -13,6 +13,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Path to questionData.json
+const dataDirectory = path.join(__dirname, '/Users/dollybuzz/VSC/discordbot/questionData.json');
 const filePath = 'questionData.json';
 
 // Log the content when the bot starts
