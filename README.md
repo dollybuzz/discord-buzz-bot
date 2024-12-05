@@ -8,6 +8,8 @@ References:
 [discord.js](https://discord.js.org/)
 [discord.dev](https://discord.com/developers/docs/intro)
 
+Disadvantage: The json file which contains the weekly questions gets wiped with Heroku's dyno restart. Consequently, a new question of the week is selected prior to the scheduled time. The only ideal solution is to use a database to prevent the current question from changing prematurely, but the temporary decision is to avoid using a database at this time.
+
 **BuzzBot's Privacy Policy**
 
 **1. Introduction**  
@@ -61,7 +63,7 @@ Welcome to BuzzBot! By inviting and using this bot on your Discord server, you a
 - BuzzBot is intended for community engagement through thought-provoking and respectful questions. Please use the bot in a positive and constructive manner.
 - Users are responsible for following all server rules while interacting with the bot and should not use the bot for spam, harassment, or offensive behavior.
 
-2.2 **Permissions**
+  2.2 **Permissions**
 
 - Users who initiate bot commands should have the appropriate permissions as determined by the server administrators. Unauthorized or disruptive use of the bot may result in restriction or removal of access.
 
@@ -71,7 +73,7 @@ Welcome to BuzzBot! By inviting and using this bot on your Discord server, you a
 - Server administrators are responsible for configuring the bot and managing user permissions. They may set which users or roles can initiate commands.
 - Administrators are encouraged to moderate and monitor questions posted by the bot to ensure that they align with the server’s community guidelines.
 
-3.2 **User Data**
+  3.2 **User Data**
 
 - BuzzBot may collect limited data, such as server IDs, user IDs, and bot interaction logs, to provide functionality. No personal or sensitive data is stored or shared by BuzzBot beyond what is necessary for operation.
 
@@ -80,7 +82,7 @@ Welcome to BuzzBot! By inviting and using this bot on your Discord server, you a
 
 - BuzzBot is provided for free and intended for personal or community use. Excessive or abusive use of the bot, including automated or excessive command requests, may result in limited access or removal.
 
-4.2 **Maintenance and Updates**
+  4.2 **Maintenance and Updates**
 
 - BuzzBot may undergo maintenance or updates to improve functionality. While efforts will be made to ensure uptime, service interruptions may occur.
 

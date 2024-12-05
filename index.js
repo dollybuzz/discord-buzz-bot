@@ -136,7 +136,6 @@ cron.schedule('0 0 * * 1', selectNewQuestion, {
   timezone: 'UTC'
 });
 
-
 // Load the initial question for the week
 loadQuestionData();
 if (!questionData.currentQuestion) {
