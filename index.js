@@ -13,7 +13,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Path to questionData.json
-const filePath = path.join(__dirname, './data/questionData.json');
+const filePath = path.join(__dirname, './questionData.json');
 
 // Log the content when the bot starts
 fs.readFile(filePath, 'utf-8', (err, data) => {
@@ -140,13 +140,14 @@ const selectNewQuestion = () => {
     }
     questionData.currentQuestion = questionData.shuffledQuestions.pop();  // Get the next question
     fs.writeFileSync(questionDataPath, JSON.stringify(questionData));
+    console.log('Scheduled task triggered at: ', new Date().toISOString());
 };
 
 const cron = require('node-cron');
 
 // Schedule the job to run every Monday at midnight in UTC
 cron.schedule('0 0 * * 1', selectNewQuestion, {
-  timezone: 'UTC' 
+  timezone: 'UTC'
 });
 
 
