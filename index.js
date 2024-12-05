@@ -13,7 +13,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Path to questionData.json
-const filePath = path.join(__dirname, './questionData.json'); /Users/dollybuzz/VSC/discordbot/questionData.json
+const filePath = path.join(__dirname, './questionData.json');
 
 // Log the content when the bot starts
 fs.readFile(filePath, 'utf-8', (err, data) => {
