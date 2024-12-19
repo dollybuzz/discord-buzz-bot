@@ -8,9 +8,25 @@ const app = express();
 const { Client, GatewayIntentBits, SlashCommandBuilder } = require('discord.js');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10');
-const { scheduleJob } = require('node-schedule');
 const fs = require('fs');
-const tools = require("./tools.js");
+const mysql = require('mysql2');
+
+//Create a database connection
+const connection = await mysql.createConnection({
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    user: process.env.DB_PORT,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
+  });
+
+//Connect to database
+connection.connect((err) => {
+    if (err) throw err;
+    console.log("Connected to MySQL Database!");
+  });
+
+connection.end();
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
