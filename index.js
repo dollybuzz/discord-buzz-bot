@@ -10,6 +10,7 @@ const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10');
 const { scheduleJob } = require('node-schedule');
 const fs = require('fs');
+const tools = require("./tools.js");
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
