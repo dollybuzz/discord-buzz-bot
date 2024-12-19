@@ -9,10 +9,10 @@ const { Client, GatewayIntentBits, SlashCommandBuilder } = require('discord.js')
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10');
 const fs = require('fs');
-const mysql = require('mysql2');
+const mysql = require('mysql2/');
 
 //Create a database connection
-const connection = await mysql.createConnection({
+const connection = mysql.createConnection({
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     user: process.env.DB_PORT,
