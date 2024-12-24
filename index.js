@@ -22,8 +22,8 @@ const mysql = require('mysql2');
 
 //Connect to database, handle error, close connection when done
 try {
-    const query =``;
-
+    const query =`
+`;
     await connection.query(query);
     console.log('Weekly rotation executed successfully.');
 } catch (err) {
@@ -31,23 +31,9 @@ try {
 } finally {
     connection.end();
 }
-connection.connect((err) => {
-    if (err) throw err;
-    console.log("Connected to MySQL Database!");
-  });
-
-connection.end();
 })();
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
-
-
-const cron = require('node-cron');
-
-// Schedule the job to run every Monday at midnight in UTC
-cron.schedule('0 0 * * 1', selectNewQuestion, {
-  timezone: 'UTC'
-});
 
 // Register the slash command
 client.once('ready', async () => {
