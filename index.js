@@ -13,6 +13,8 @@ const mysql = require('mysql2/promise');
 
 (async() => {
 
+    let currentQuestion = "";
+
 //Create a database connection
     const connection = await mysql.createConnection({
     host: process.env.DB_HOST,
@@ -53,7 +55,8 @@ try {
     // Retrieve the active question
     const [rows] = await connection.query('SELECT * FROM qotw_questions WHERE is_active = TRUE');
     console.log('Current question:', rows[0]);
-    return rows[0];
+    currentQuestion = rows[0];
+    return currentQuestion;
   } catch (error) {
     console.error('Error during question rotation:', error);
     throw error;
@@ -87,7 +90,7 @@ client.once('ready', async () => {
 client.on('interactionCreate', async interaction => {
     if (!interaction.isCommand() || interaction.commandName !== 'qotw') return;
 
-    await interaction.reply(`Question of the Week: ${questionData.currentQuestion}`);
+    await interaction.reply(`Question of the Week: ${currentQuestion}`);
 });
 
 client.login(process.env.DISCORD_TOKEN);
