@@ -9,7 +9,7 @@ const { Client, GatewayIntentBits, SlashCommandBuilder } = require('discord.js')
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10');
 const fs = require('fs');
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 
 (async() => {
 
