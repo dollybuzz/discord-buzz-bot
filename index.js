@@ -10,10 +10,9 @@ const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10');
 const fs = require('fs');
 const mysql = require('mysql2/promise');
+let currentQuestion;
 
 (async() => {
-
-    let currentQuestion = "";
 
 //Create a database connection
     const connection = await mysql.createConnection({
@@ -53,10 +52,14 @@ try {
     `, [current_week, current_week]);
 
     // Retrieve the active question
-    const [rows] = await connection.query('SELECT * FROM qotw_questions WHERE is_active = TRUE');
-    console.log('Current question:', rows[0]);
-    currentQuestion = rows[0];
-    return currentQuestion;
+    currentQuestion = await (async () => {
+        const [rows] = await connection.query('SELECT * FROM qotw_questions WHERE is_active = TRUE');
+        console.log('Row retrieved from DB:', rows[0]);
+        return rows[0];
+    })();
+
+    console.log('Current Question: ', currentQuestion);
+    
   } catch (error) {
     console.error('Error during question rotation:', error);
     throw error;
