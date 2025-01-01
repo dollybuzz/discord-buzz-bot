@@ -53,9 +53,9 @@ try {
 
     // Retrieve the active question
     currentQuestion = await (async () => {
-        const [rows] = await connection.query('SELECT question FROM qotw_questions WHERE is_active = TRUE');
+        const [rows] = await connection.query('SELECT * FROM qotw_questions WHERE is_active = TRUE');
         console.log('Row retrieved from DB:', rows[0]);
-        return rows[0];
+        return rows[0].question;
     })();
 
     console.log('Current Question: ', currentQuestion);
