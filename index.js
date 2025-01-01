@@ -12,6 +12,16 @@ const fs = require('fs');
 const mysql = require('mysql2');
 
 (async() => {
+
+//Create a database connection
+    const connection = await mysql.createConnection({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
+  });
+
+//Connect to database, handle error, close connection when done
     try {
         // Step 1: Retrieve the currently active question
         const [currentQuestionRows] = await connection.query(
@@ -75,7 +85,7 @@ const mysql = require('mysql2');
         console.error('Error during question rotation:', error);
       } finally {
         connection.end();
-      }      
+      } 
 })();
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
