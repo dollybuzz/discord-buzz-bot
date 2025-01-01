@@ -39,7 +39,7 @@ const mysql = require('mysql2/promise');
       
         // Step 2: Deactivate the current question
         await connection.query(
-          'UPDATE questions SET is_active = FALSE WHERE is_active = TRUE;'
+          'UPDATE qotw_questions SET is_active = FALSE WHERE is_active = TRUE;'
         );
       
         // Step 3: Calculate the current week of the year
