@@ -22,70 +22,42 @@ const mysql = require('mysql2/promise');
   });
 
 //Connect to database, handle error, close connection when done
-    try {
-        // Step 1: Retrieve the currently active question
-        const [currentQuestionRows] = await connection.query(
-          'SELECT id, question FROM qotw_questions WHERE is_active = TRUE LIMIT 1;'
-        );
-      
-        let currentQuestion = null;
-      
-        if (currentQuestionRows.length > 0) {
-          currentQuestion = currentQuestionRows[0]; // Store the active question's details in a variable
-          console.log('Current active question:', currentQuestion);
-        } else {
-          console.log('No active question found.');
-        }
-      
-        // Step 2: Deactivate the current question
-        await connection.query(
-          'UPDATE qotw_questions SET is_active = FALSE WHERE is_active = TRUE;'
-        );
-      
-        // Step 3: Calculate the current week of the year
-        const currentWeekQuery = `
-          SET @current_week = WEEK(CURDATE(), 1);
-          SET @next_week = (@current_week % 52) + 1;
-        `;
-        await connection.query(currentWeekQuery);
-      
-        // Step 4: Reset questions if all have been asked
-        const resetQuery = `
-          IF NOT EXISTS (
-            SELECT 1
-            FROM qotw_questions
-            WHERE last_asked_week IS NULL OR last_asked_week < @current_week
-          ) THEN
-            UPDATE qotw_questions SET last_asked_week = NULL;
-          END IF;
-        `;
-        await connection.query(resetQuery);
-      
-        // Step 5: Activate the next available question
-        await connection.query(`
-          UPDATE qotw_questions
-          SET is_active = TRUE, last_asked_week = @current_week
-          WHERE last_asked_week IS NULL OR last_asked_week < @current_week
-          ORDER BY id ASC
-          LIMIT 1;
-        `);
-      
-        // Step 6: Retrieve the new active question
-        const [newActiveQuestionRows] = await connection.query(
-          'SELECT id, question FROM qotw_questions WHERE is_active = TRUE LIMIT 1;'
-        );
-      
-        if (newActiveQuestionRows.length > 0) {
-          const newActiveQuestion = newActiveQuestionRows[0];
-          console.log('New active question:', newActiveQuestion);
-        } else {
-          console.log('No new question activated.');
-        }
-      } catch (error) {
-        console.error('Error during question rotation:', error);
-      } finally {
-        connection.end();
-      } 
+try {
+    // Deactivate the current question
+    await connection.query('UPDATE qotw_questions SET is_active = FALSE WHERE is_active = TRUE');
+
+    // Calculate the current week
+    const [[{ current_week }]] = await connection.query('SELECT WEEK(CURDATE(), 1) AS current_week');
+    const next_week = (current_week % 52) + 1;
+
+    // Reset last_asked_week if needed
+    const [[{ remaining }]] = await connection.query(`
+      SELECT COUNT(*) AS remaining
+      FROM qotw_questions
+      WHERE last_asked_week IS NULL OR last_asked_week < ?
+    `, [current_week]);
+
+    if (remaining === 0) {
+      await connection.query('UPDATE qotw_questions SET last_asked_week = NULL');
+    }
+
+    // Activate the next question
+    await connection.query(`
+      UPDATE qotw_questions
+      SET is_active = TRUE, last_asked_week = ?
+      WHERE last_asked_week IS NULL OR last_asked_week < ?
+      ORDER BY id ASC
+      LIMIT 1
+    `, [current_week, current_week]);
+
+    // Retrieve the active question
+    const [rows] = await connection.query('SELECT * FROM qotw_questions WHERE is_active = TRUE');
+    console.log('Current question:', rows[0]);
+    return rows[0];
+  } catch (error) {
+    console.error('Error during question rotation:', error);
+    throw error;
+  }
 })();
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
