@@ -25,7 +25,6 @@ const mysql = require('mysql2/promise');
   async function getActiveQuestion(connection) {
     try {
       const [rows] = await connection.query('SELECT * FROM qotw_questions WHERE is_active = TRUE');
-      console.log('Row retrieved from DB:', rows[0]);
       if (rows.length > 0) {
         return rows[0].question;
       } else {
@@ -44,7 +43,7 @@ try {
     const currentQuestion = await getActiveQuestion(connection);
     //Check if today is Monday
     const today = new Date();
-    if (today.getDay() !== 1) {
+    if (today.getDay() !== 1 && currentQuestion !== null) {
       console.log('Today is not Monday. No rotation performed. Current question: ', currentQuestion);
       return currentQuestion;
     }
