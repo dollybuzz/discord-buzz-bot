@@ -11,6 +11,8 @@ const { Routes } = require('discord-api-types/v10');
 const fs = require('fs');
 const mysql = require('mysql2/promise');
 
+let currentQuestion = null;
+
 (async() => {
 
 //Create a database connection
@@ -40,7 +42,7 @@ const mysql = require('mysql2/promise');
 
 //Connect to database, handle error, close connection when done
 try {
-    const currentQuestion = await getActiveQuestion(connection);
+    currentQuestion = await getActiveQuestion(connection);
     //Check if today is Monday
     const today = new Date();
     if (today.getDay() !== 1 && currentQuestion !== null) {
@@ -75,7 +77,7 @@ try {
     `, [current_week, current_week]);
 
     //Return the current question
-    const currentQuestion = await getActiveQuestion(connection);
+    currentQuestion = await getActiveQuestion(connection);
     return currentQuestion;
   }
   } catch (error) {
