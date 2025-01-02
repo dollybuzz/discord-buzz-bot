@@ -24,12 +24,19 @@ let currentQuestion;
 
 //Connect to database, handle error, close connection when done
 try {
+
+    //Check if today is Monday
+    const today = new Date();
+    if (today.getDay() !== 1) {
+      console.log('Today is not Monday. No rotation performed.');
+      return;
+    }
+  
     // Deactivate the current question
     await connection.query('UPDATE qotw_questions SET is_active = FALSE WHERE is_active = TRUE');
 
     // Calculate the current week
     const [[{ current_week }]] = await connection.query('SELECT WEEK(CURDATE(), 1) AS current_week');
-    const next_week = (current_week % 52) + 1;
 
     // Reset last_asked_week if needed
     const [[{ remaining }]] = await connection.query(`
