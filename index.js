@@ -10,7 +10,6 @@ const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10');
 const fs = require('fs');
 const mysql = require('mysql2/promise');
-let currentQuestion;
 
 (async() => {
 
@@ -22,16 +21,34 @@ let currentQuestion;
     database: process.env.DB_NAME
   });
 
+  //Get the active question
+  async function getActiveQuestion(connection) {
+    try {
+      const [rows] = await connection.query('SELECT * FROM qotw_questions WHERE is_active = TRUE');
+      console.log('Row retrieved from DB:', rows[0]);
+      if (rows.length > 0) {
+        return rows[0].question;
+      } else {
+      console.log('No active question found.');
+      return null; 
+    } 
+    } catch (error) 
+    {
+      console.error('Error retrieving active question: ', error);
+      throw error;
+    }
+  }
+
 //Connect to database, handle error, close connection when done
 try {
-
+    const currentQuestion = await getActiveQuestion(connection);
     //Check if today is Monday
     const today = new Date();
     if (today.getDay() !== 1) {
-      console.log('Today is not Monday. No rotation performed.');
-      return;
+      console.log('Today is not Monday. No rotation performed. Current question: ', currentQuestion);
+      return currentQuestion;
     }
-  
+    else {
     // Deactivate the current question
     await connection.query('UPDATE qotw_questions SET is_active = FALSE WHERE is_active = TRUE');
 
@@ -58,15 +75,10 @@ try {
       LIMIT 1
     `, [current_week, current_week]);
 
-    // Retrieve the active question
-    currentQuestion = await (async () => {
-        const [rows] = await connection.query('SELECT * FROM qotw_questions WHERE is_active = TRUE');
-        console.log('Row retrieved from DB:', rows[0]);
-        return rows[0].question;
-    })();
-
-    console.log('Current Question: ', currentQuestion);
-    
+    //Return the current question
+    const currentQuestion = await getActiveQuestion(connection);
+    return currentQuestion;
+  }
   } catch (error) {
     console.error('Error during question rotation:', error);
     throw error;
