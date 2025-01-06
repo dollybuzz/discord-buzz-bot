@@ -1,14 +1,12 @@
 # BuzzBot
 
-BuzzBot brings your community to life with fun, thought-provoking weekly questions! Post automatically or by command, and get everyone chatting, sharing, and connecting. Easy to set up and privacy-friendly, QOTW is the ultimate way to keep your server buzzing with fresh conversations!
+BuzzBot brings your community to life with fun, thought-provoking weekly questions to get everyone chatting, sharing, and connecting. Easy to set up and privacy-friendly, QOTW is the ultimate way to keep your server buzzing with fresh conversations!
 
 After installing the bot [here](https://discord.com/oauth2/authorize?client_id=1303331750034014269), simply interact with BuzzBot by typing "/qotw" in your chat bar!
 
 References:
 [discord.js](https://discord.js.org/)
 [discord.dev](https://discord.com/developers/docs/intro)
-
-Disadvantage: The json file which contains the weekly questions gets wiped with Heroku's dyno restart. Consequently, a new question of the week is selected prior to the scheduled time. The only ideal solution is to use a database to prevent the current question from changing prematurely, but the temporary decision is to avoid using a database at this time.
 
 **BuzzBot's Privacy Policy**
 
