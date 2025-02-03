@@ -71,7 +71,7 @@ try {
     await connection.query(`
       UPDATE qotw_questions
       SET is_active = TRUE, last_asked_week = ?
-      WHERE last_asked_week IS NULL OR last_asked_week < ?
+      WHERE is_active = FALSE AND (last_asked_week IS NULL OR last_asked_week < ?)
       ORDER BY id ASC
       LIMIT 1
     `, [current_week, current_week]);
