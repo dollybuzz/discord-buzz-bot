@@ -118,7 +118,7 @@ client.on('interactionCreate', async interaction => {
     if (!interaction.isCommand() || interaction.commandName !== 'qotw') return;
 
     //Wake up bot by pinging itself since app sleeps after 30 mintues with Heroku Eco dyno
-    axios.get('https://discord-buzz-bot-548b5f2665e6.herokuapp.com/')
+    axios.get('https://discord-buzz-bot.herokuapp.com/')
     .then(() => console.log('Self-ping to prevent sleep'))
     .catch(err => console.log('Failed to self-ping: ', err));
 
@@ -126,6 +126,8 @@ client.on('interactionCreate', async interaction => {
 });
 
 client.login(process.env.DISCORD_TOKEN);
+
+app.get('/', (req, res) => res.send('Bot is running!'));
 
 //server listener
 app.listen(process.env.PORT, process.env.IP, function() {
