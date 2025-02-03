@@ -1,6 +1,6 @@
-//Custom discord bot to ask a random question of the week.
-//To view status in terminal: pm2 status
-//To view logs in terminal: pm2 logs qotw
+//Custom discord bot to ask a random question of the week. Intended to use with Heroku's eco dyno. Database managed on SQL Workbench.
+
+//To view logs: heroku logs --tail --app discord-buzz-bot
 
 require('dotenv').config();
 const express = require("express");
