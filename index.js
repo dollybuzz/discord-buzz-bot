@@ -127,6 +127,7 @@ client.on('interactionCreate', async interaction => {
 
 client.login(process.env.DISCORD_TOKEN);
 
+//Add route for HTTP to ping
 app.get('/', (req, res) => res.send('Bot is running!'));
 
 //server listener
