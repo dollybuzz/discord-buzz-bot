@@ -80,7 +80,7 @@ try {
     `, [current_week, current_week]);
 
     //Return the current question
-    console.log('Current question: ', currentQuestion);
+    console.log('Today is Monday. Rotation performed. Current question: ', currentQuestion);
     return currentQuestion;
   }
   } catch (error) {
