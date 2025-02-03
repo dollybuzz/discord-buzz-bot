@@ -26,12 +26,12 @@ let currentQuestion = null;
   //Get the active question
   async function getActiveQuestion(connection) {
     try {
-      const [rows] = await connection.query('SELECT * FROM qotw_questions WHERE is_active = TRUE');
-      if (rows.length > 0) {
-        return rows[0].question;
+      const [current] = await connection.query('SELECT question FROM qotw_questions WHERE is_active = TRUE');
+      if (current.length > 0) {
+        return current[0].question;
       } else {
-      console.log('No active question found.');
-      return null; 
+        console.log('No active question found.');
+        return null; 
     } 
     } catch (error) 
     {
@@ -50,11 +50,14 @@ try {
       return currentQuestion;
     }
     else {
-    // Deactivate the current question
-    await connection.query('UPDATE qotw_questions SET is_active = FALSE WHERE is_active = TRUE');
-
     // Calculate the current week
     const [[{ current_week }]] = await connection.query('SELECT WEEK(CURDATE(), 1) AS current_week');
+
+    // Deactivate the current question if not the current week
+    await connection.query(`UPDATE qotw_questions SET is_active = FALSE WHERE is_active = TRUE AND last_asked_week < ?
+    ORDER BY id ASC
+    LIMIT 1
+    `, [current_week]);
 
     // Reset last_asked_week if needed
     const [[{ remaining }]] = await connection.query(`
@@ -71,13 +74,13 @@ try {
     await connection.query(`
       UPDATE qotw_questions
       SET is_active = TRUE, last_asked_week = ?
-      WHERE is_active = FALSE AND (last_asked_week IS NULL OR last_asked_week < ?)
+      WHERE (last_asked_week IS NULL AND last_asked_week < ?) AND is_active = FALSE
       ORDER BY id ASC
       LIMIT 1
     `, [current_week, current_week]);
 
     //Return the current question
-    currentQuestion = await getActiveQuestion(connection);
+    console.log('Current question: ', currentQuestion);
     return currentQuestion;
   }
   } catch (error) {
