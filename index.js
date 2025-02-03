@@ -10,6 +10,7 @@ const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10');
 const fs = require('fs');
 const mysql = require('mysql2/promise');
+const axios = require('axios');
 
 let currentQuestion = null;
 
@@ -115,6 +116,11 @@ client.once('ready', async () => {
 
 client.on('interactionCreate', async interaction => {
     if (!interaction.isCommand() || interaction.commandName !== 'qotw') return;
+
+    //Wake up bot by pinging itself since app sleeps after 30 mintues with Heroku Eco dyno
+    axios.get('https://discord-buzz-bot-548b5f2665e6.herokuapp.com/')
+    .then(() => console.log('Self-ping to prevent sleep'))
+    .catch(err => consolellog('Failed to self-ping: ', err));
 
     await interaction.reply(`Question of the Week: ${currentQuestion}`);
 });
