@@ -123,7 +123,7 @@ client.on('interactionCreate', async interaction => {
   try {
     //Wake up bot by pinging itself (since app sleeps after 30 mintues with Heroku Eco dyno)
     axios.get('https://discord-buzz-bot-548b5f2665e6.herokuapp.com/')
-    .then(() => console.log('Self-ping to prevent sleep'))
+    .then(() => console.log('Self-ping to wake up app upon user interaction'))
     .catch(err => console.log('Failed to self-ping: ', err.message));
 
     //Error Handling
