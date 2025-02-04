@@ -90,6 +90,8 @@ try {
   }
 })();
 
+
+//Create the client for bot to interact with discord API
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 // Register the slash command
@@ -114,15 +116,38 @@ client.once('ready', async () => {
     }
 });
 
+//Create the interaction
 client.on('interactionCreate', async interaction => {
     if (!interaction.isCommand() || interaction.commandName !== 'qotw') return;
 
-    //Wake up bot by pinging itself since app sleeps after 30 mintues with Heroku Eco dyno
+  try {
+    //Wake up bot by pinging itself (since app sleeps after 30 mintues with Heroku Eco dyno)
     axios.get('https://discord-buzz-bot-548b5f2665e6.herokuapp.com/')
     .then(() => console.log('Self-ping to prevent sleep'))
-    .catch(err => console.log('Failed to self-ping: ', err));
+    .catch(err => console.log('Failed to self-ping: ', err.message));
+
+    //Error Handling
+    if(!currentQuestion) {
+      return interaction.reply({content: "Error: No question is available right now.", ephemeral: true });
+    }
 
     await interaction.reply(`Question of the Week: ${currentQuestion}`);
+
+  } catch (error) {
+    console.error("Error handling interaction: ", error);
+
+    //Handle known interaction errors
+    if (error.code === 10062) {
+      console.log("Interaction expired before it could be processed.");
+    } else {
+      if (interaction.replied || interaction.deferred) {
+        await interaction.followUp({content: "An error occurred while processing your request.", ephemeral: true });
+      } else {
+        await interaction.reply({content: "An error occurred while processing your request.", ephemeral: true });
+      }
+    }
+  }
+  
 });
 
 client.login(process.env.DISCORD_TOKEN);
