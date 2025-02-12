@@ -11,6 +11,14 @@ const mysql = require('mysql2/promise');
 
 let currentQuestion = null;
 
+const isLocal = process.env.LOCAL_TESTING === 'true';
+
+if (isLocal) {
+    console.log("Running bot locally...");
+} else {
+    console.log("Running bot on Heroku...");
+}
+
 (async() => {
 
 //Create a database connection
