@@ -18,6 +18,13 @@ if (isLocal) {
 } else {
     console.log("Running bot on Heroku...");
 }
+/* Note: Remember to stop the Heroku bot before local testing (node index.js) to prevent two active sessions and respect Discord rate limits.
+Use:
+  heroku ps:scale worker=0 --app discord-buzz-bot
+Restart the bot when done testing locally.
+Use:
+  heroku ps:scale worker=1 --app discord-buzz-bot
+*/
 
 (async() => {
 
