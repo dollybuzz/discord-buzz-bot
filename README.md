@@ -1,6 +1,6 @@
 # BuzzBot
 
-BuzzBot brings your community to life with fun, thought-provoking weekly questions to get everyone chatting, sharing, and connecting. Easy to set up and privacy-friendly, QOTW is the ultimate way to keep your server buzzing with fresh conversations!
+BuzzBot brings your community to life with fun, thought-provoking weekly questions to get everyone chatting, sharing, and connecting. Easy to set up and privacy-friendly, BuzzBot is the ultimate way to keep your server buzzing with fresh conversations!
 
 After installing the bot [here](https://discord.com/oauth2/authorize?client_id=1303331750034014269), simply interact with BuzzBot by typing "/qotw" in your chat bar!
 
