@@ -120,7 +120,8 @@ client.on('interactionCreate', async interaction => {
   try {
     //Error Handling
     if(!currentQuestion) {
-      return interaction.reply({content: "Error: No question is available right now.", ephemeral: true });
+      await interaction.reply({content: "Error: No question is available right now.", ephemeral: true });
+      return;
     }
 
     await interaction.reply(`Question of the Week: ${currentQuestion}`);
@@ -131,12 +132,10 @@ client.on('interactionCreate', async interaction => {
     //Handle known interaction errors
     if (error.code === 10062) {
       console.log("Interaction expired before it could be processed.");
+    } else if (!interaction.replied && !interaction.deferred) {
+      await interaction.reply({ content: "An error occurred while processing your request.", ephemeral: true });
     } else {
-      if (interaction.replied || interaction.deferred) {
-        await interaction.followUp({content: "An error occurred while processing your request.", ephemeral: true });
-      } else {
-        await interaction.reply({content: "An error occurred while processing your request.", ephemeral: true });
-      }
+      await interaction.followUp({ content: "An error occurred while processing your request.", ephemeral: true });
     }
   }
   
