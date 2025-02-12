@@ -3,14 +3,11 @@
 //To view logs: heroku logs --tail --app discord-buzz-bot
 
 require('dotenv').config();
-const express = require("express");
-const app = express();
 const { Client, GatewayIntentBits, SlashCommandBuilder } = require('discord.js');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10');
 const fs = require('fs');
 const mysql = require('mysql2/promise');
-const axios = require('axios');
 
 let currentQuestion = null;
 
@@ -118,14 +115,9 @@ client.once('ready', async () => {
 
 //Create the interaction
 client.on('interactionCreate', async interaction => {
-    if (!interaction.isCommand() || interaction.commandName !== 'qotw') return;
+  if (!interaction.isCommand() || interaction.commandName !== 'qotw') return;
 
   try {
-    //Wake up bot by pinging itself (since app sleeps after 30 mintues with Heroku Eco dyno)
-    axios.get('https://discord-buzz-bot-548b5f2665e6.herokuapp.com/')
-    .then(() => console.log('Self-ping to wake up app upon user interaction'))
-    .catch(err => console.log('Failed to self-ping: ', err.message));
-
     //Error Handling
     if(!currentQuestion) {
       return interaction.reply({content: "Error: No question is available right now.", ephemeral: true });
@@ -151,12 +143,3 @@ client.on('interactionCreate', async interaction => {
 });
 
 client.login(process.env.DISCORD_TOKEN);
-
-//Add route for HTTP to ping
-app.get('/', (req, res) => res.send('Bot is running!'));
-
-//server listener
-app.listen(process.env.PORT, process.env.IP, function() {
-    console.log("Running Express Server...");
-});
-
