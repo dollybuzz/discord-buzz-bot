@@ -60,7 +60,6 @@ try {
     const today = new Date();
     if (today.getDay() !== 1 && currentQuestion !== null) {
       console.log('Today is not Monday. No rotation performed. Current question: ', currentQuestion);
-      return currentQuestion;
     }
     else {
     // Calculate the current week
@@ -87,14 +86,14 @@ try {
     await connection.query(`
       UPDATE qotw_questions
       SET is_active = TRUE, last_asked_week = ?
-      WHERE (last_asked_week IS NULL AND last_asked_week < ?) AND is_active = FALSE
+      WHERE last_asked_week IS NULL AND is_active = FALSE
       ORDER BY id ASC
       LIMIT 1
     `, [current_week, current_week]);
 
     //Return the current question
+    currentQuestion = await getActiveQuestion(connection);
     console.log('Today is Monday. Rotation performed. Current question: ', currentQuestion);
-    return currentQuestion;
   }
   } catch (error) {
     console.error('Error during question rotation:', error);
