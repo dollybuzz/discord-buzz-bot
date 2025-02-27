@@ -84,6 +84,8 @@ client.on('interactionCreate', async interaction => {
     }
 
     await interaction.reply(`Question of the Week: ${activeQuestion}`);
+
+    await connection.end();
     } else {
       console.log("error in database connection.");
       await interaction.reply({ content: "Error: Database connection is unavailable.", ephemeral: true });
@@ -106,3 +108,12 @@ client.on('interactionCreate', async interaction => {
 });
 
 client.login(process.env.DISCORD_TOKEN);
+
+// Gracefully shut down and close the database connection
+process.on('SIGINT', async () => {
+  if (connection) {
+    console.log('Closing database connection...');
+    await connection.end();
+  }
+  process.exit();
+});
