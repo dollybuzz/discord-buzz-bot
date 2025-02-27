@@ -77,7 +77,7 @@ client.on('interactionCreate', async interaction => {
 
     await interaction.reply(`Question of the Week: ${activeQuestion}`);
 
-    connection.end();
+    await connection.end();
 
   } catch (error) {
     console.error("Error handling interaction: ", error);
