@@ -60,8 +60,14 @@ const connection = await mysql.createConnection({
 client.on('interactionCreate', async interaction => {
   if (!interaction.isCommand() || interaction.commandName !== 'qotw') return;
 
+  connection.connect((err) => {
+    if (err) throw err;
+    console.log('Database connected!');
+  });
+
   try {
     const [result] = await connection.query('SELECT question FROM qotw_questions WHERE is_active = TRUE LIMIT 1');
+
     const activeQuestion = result.length > 0 ? result[0].question : null;
 
     if(!activeQuestion) {
@@ -70,6 +76,8 @@ client.on('interactionCreate', async interaction => {
     }
 
     await interaction.reply(`Question of the Week: ${activeQuestion}`);
+
+    connection.end();
 
   } catch (error) {
     console.error("Error handling interaction: ", error);
