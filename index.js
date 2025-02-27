@@ -26,6 +26,23 @@ Use:
 //Create the client for bot to interact with discord API
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
+//Create a database connection
+let connection;
+async function createDbConnection() {
+  try {
+    connection = await mysql.createConnection({
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME
+    });
+    console.log("Database connected successfully.");
+  } catch (err) {
+    console.error("Error connecting to database: ", err);
+    process.exit(1);
+  }
+}
+
 // Register the slash command
 client.once('ready', async () => {
     console.log('Bot is ready!');
@@ -46,27 +63,18 @@ client.once('ready', async () => {
     } catch (error) {
         console.error(error);
     }
-});
 
-//Create a database connection
-const connection = await mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
+    //Connect to database after bot is ready
+    await createDbConnection();
 });
 
 //Create the interaction
 client.on('interactionCreate', async interaction => {
   if (!interaction.isCommand() || interaction.commandName !== 'qotw') return;
 
-  connection.connect((err) => {
-    if (err) throw err;
-    console.log('Database connected!');
-  });
-
   try {
-    const [result] = await connection.query('SELECT question FROM qotw_questions WHERE is_active = TRUE LIMIT 1');
+    if (connection) {
+      const [result] = await connection.query('SELECT question FROM qotw_questions WHERE is_active = TRUE LIMIT 1');
 
     const activeQuestion = result.length > 0 ? result[0].question : null;
 
@@ -76,9 +84,10 @@ client.on('interactionCreate', async interaction => {
     }
 
     await interaction.reply(`Question of the Week: ${activeQuestion}`);
-
-    await connection.end();
-
+    } else {
+      console.log("error in database connection.");
+      await interaction.reply({ content: "Error: Database connection is unavailable.", ephemeral: true });
+    }
   } catch (error) {
     console.error("Error handling interaction: ", error);
 
@@ -87,7 +96,7 @@ client.on('interactionCreate', async interaction => {
       return;
     }
     
-    //Ensure we only reply once
+    //Ensure we only reply once if failed interaction
     if (!interaction.replied && !interaction.deferred) {
       await interaction.reply({ content: "An error occurred while processing your request.", ephemeral: true });
     } else {
