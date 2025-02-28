@@ -76,17 +76,18 @@ client.on('interactionCreate', async interaction => {
     if (connection) {
       const [result] = await connection.query('SELECT question FROM qotw_questions WHERE is_active = TRUE LIMIT 1');
 
-    const activeQuestion = result.length > 0 ? result[0].question : null;
+      const activeQuestion = result.length > 0 ? result[0].question : null;
 
-    if(!activeQuestion) {
-      await interaction.reply({content: "Error: No question is available right now.", ephemeral: true });
+      if(!activeQuestion) {
+        await interaction.reply({content: "Error: No question is available right now.", ephemeral: true });
       return;
-    }
+      }
 
-    await interaction.reply(`Question of the Week: ${activeQuestion}`);
+      await interaction.reply(`Question of the Week: ${activeQuestion}`);
+      console.log(`User interacted with bot. QOTW: ${activeQuestion}`);
     
     } else {
-      console.log("error in database connection.");
+      console.log("Error in database connection.");
       await interaction.reply({ content: "Error: Database connection is unavailable.", ephemeral: true });
     }
   } catch (error) {
@@ -108,11 +109,11 @@ client.on('interactionCreate', async interaction => {
 
 client.login(process.env.DISCORD_TOKEN);
 
-// Gracefully shut down and close the database connection
+/*// Gracefully shut down and close the database connection
 process.on('SIGINT', async () => {
   if (connection) {
     console.log('Closing database connection...');
     await connection.end();
   }
   process.exit();
-});
+});*/
