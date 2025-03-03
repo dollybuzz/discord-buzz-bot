@@ -75,7 +75,6 @@ import mysql from 'mysql2/promise';
       console.error('Error during question rotation:', error);
       throw error;
     } finally {
-      await connection.end();
       console.log("Scheduler task completed. Exiting...");
       process.exit(0);
     }
