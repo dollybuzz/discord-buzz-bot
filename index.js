@@ -108,12 +108,3 @@ client.on('interactionCreate', async interaction => {
 });
 
 client.login(process.env.DISCORD_TOKEN);
-
-// Gracefully shut down and close the database connection
-process.on('SIGTERM', async () => {
-  if (connection) {
-    console.log('Closing database connection...');
-    await connection.end();
-  }
-  process.exit(0);
-});
