@@ -29,10 +29,12 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 //Create a database connection
 let connection;
 async function createDbConnection() {
+  /*This method doesn't prove to work. Must find a way to reuse the connection, if not opt simply to use connection pool route.
+  
   if (connection && connection.connection && connection.connection.state !== 'disconnected') {
     console.log("Database already connected. Using existing connection.");
     return; // Reuse existing connection
-  }
+  }*/
   
   try {
     connection = await mysql.createConnection({
