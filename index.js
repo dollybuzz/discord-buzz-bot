@@ -95,7 +95,7 @@ client.on('interactionCreate', async interaction => {
       setTimeout(async () => {
         console.log("Inactive period. Closing out database connection...")
         connection.close();
-      }, 50000);
+      }, 60000);
     }
   } catch (error) {
     console.error("Error handling interaction: ", error);
