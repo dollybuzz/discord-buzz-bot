@@ -92,6 +92,9 @@ client.on('interactionCreate', async interaction => {
     }
   } catch (error) {
     console.error("Error handling interaction: ", error);
+    console.log("Database connection: ", connection);
+
+    await createDbConnection(); //try connecting to database again if connection is in closed state
 
     if (error.code === 10062) {
       console.log("Interaction expired before it could be processed.");
