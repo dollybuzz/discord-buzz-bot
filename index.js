@@ -85,11 +85,11 @@ client.on('interactionCreate', async interaction => {
 
       await interaction.reply(`Question of the Week: ${activeQuestion}`);
       console.log(`User interacted with bot. QOTW: ${activeQuestion}`);
-      
+
       setTimeout(async () => {
         console.log("Inactive period. Closing out database connection...")
         connection.close();
-      }, 5000);
+      }, 30000);
     }
   } catch (error) {
     console.error("Error handling interaction: ", error);
