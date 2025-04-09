@@ -97,18 +97,25 @@ client.on('interactionCreate', async interaction => {
     }
   } catch (error) {
     console.error("Error handling interaction: ", error);
+
+    if (error.code === undefined) {
+      console.log("Attempting to reconnect to database since the connection may be closed...");
+      await createDbConnection();
+    }
     
     if (error.code === 10062) {
       console.log("Interaction expired before it could be processed.");
       return;
     }
-    
+
     //Ensure we only reply once if failed interaction
+    setTimeout(async () => {
     if (!interaction.replied && !interaction.deferred) {
       await interaction.reply({ content: "An error occurred while processing your request.", ephemeral: true });
     } else {
       await interaction.followUp({ content: "An error occurred while processing your request.", ephemeral: true });
     }
+    }, 3000);
   }
 });
 
