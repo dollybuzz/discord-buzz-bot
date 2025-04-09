@@ -111,7 +111,7 @@ client.on('interactionCreate', async interaction => {
     setTimeout(async () => {
       console.log("Inactive period. Closing out database connection. Exiting...")
       process.exit(0);
-    }, 10000);
+    }, 60000);
   }
 });
 
