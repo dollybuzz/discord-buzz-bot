@@ -85,6 +85,7 @@ client.on('interactionCreate', async interaction => {
 
       await interaction.reply(`Question of the Week: ${activeQuestion}`);
       console.log(`User interacted with bot. QOTW: ${activeQuestion}`);
+      console.log("Database connection: ", connection);
     
     } else {
       console.log("Error in database connection.");
