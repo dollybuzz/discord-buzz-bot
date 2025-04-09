@@ -93,7 +93,7 @@ client.on('interactionCreate', async interaction => {
       setTimeout(async () => {
         console.log("Inactive period. Closing out database connection...")
         connection.close();
-      }, 30000);
+      }, 3000);
     }
   } catch (error) {
     console.error("Error handling interaction: ", error);
@@ -109,13 +109,11 @@ client.on('interactionCreate', async interaction => {
     }
 
     //Ensure we only reply once if failed interaction
-    setTimeout(async () => {
     if (!interaction.replied && !interaction.deferred) {
-      await interaction.reply({ content: "An error occurred while processing your request.", ephemeral: true });
+      await interaction.reply({ content: "Sorry, I fell asleep. Give me another chance.", ephemeral: true });
     } else {
       await interaction.followUp({ content: "An error occurred while processing your request.", ephemeral: true });
     }
-    }, 3000);
   }
 });
 
