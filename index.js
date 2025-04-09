@@ -85,6 +85,11 @@ client.on('interactionCreate', async interaction => {
 
       await interaction.reply(`Question of the Week: ${activeQuestion}`);
       console.log(`User interacted with bot. QOTW: ${activeQuestion}`);
+      
+      setTimeout(async () => {
+        console.log("Inactive period. Closing out database connection...")
+        connection.close();
+      }, 5000);
     }
   } catch (error) {
     console.error("Error handling interaction: ", error);
@@ -106,12 +111,6 @@ client.on('interactionCreate', async interaction => {
     } else {
       await interaction.followUp({ content: "An error occurred while processing your request.", ephemeral: true });
     }
-  }
-  finally {
-    setTimeout(async () => {
-      console.log("Inactive period. Closing out database connection...")
-      connection.close();
-    }, 5000);
   }
 });
 
