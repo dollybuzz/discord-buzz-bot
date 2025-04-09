@@ -62,22 +62,17 @@ client.once('ready', async () => {
         console.log('Successfully registered application commands.');
     } catch (error) {
         console.error(error);
-    }
-
-    //Connect to database after bot is ready
-    await createDbConnection();
+    }    
 });
 
 //Create the interaction
 client.on('interactionCreate', async interaction => {
   if (!interaction.isCommand() || interaction.commandName !== 'qotw') return;
 
+  await createDbConnection();
+
   try {
-    if (!connection) {
-      console.log("Trying to reconnect to database since it may be in a closed state");
-      await createDbConnection();
-    }
-    else {
+    if (connection) {
       const [result] = await connection.query('SELECT question FROM qotw_questions WHERE is_active = TRUE LIMIT 1');
 
       const activeQuestion = result.length > 0 ? result[0].question : null;
