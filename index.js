@@ -107,6 +107,12 @@ client.on('interactionCreate', async interaction => {
       await interaction.followUp({ content: "An error occurred while processing your request.", ephemeral: true });
     }
   }
+  finally {
+    setTimeout(async () => {
+      console.log("Inactive period. Closing out database connection. Exiting...")
+      process.exit(0);
+    }, 10000);
+  }
 });
 
 client.login(process.env.DISCORD_TOKEN);
