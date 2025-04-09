@@ -73,7 +73,11 @@ client.on('interactionCreate', async interaction => {
   if (!interaction.isCommand() || interaction.commandName !== 'qotw') return;
 
   try {
-    if (connection) {
+    if (!connection) {
+      console.log("Trying to reconnect to database since it may be in a closed state");
+      await createDbConnection();
+    }
+    else {
       const [result] = await connection.query('SELECT question FROM qotw_questions WHERE is_active = TRUE LIMIT 1');
 
       const activeQuestion = result.length > 0 ? result[0].question : null;
@@ -93,12 +97,6 @@ client.on('interactionCreate', async interaction => {
     }
   } catch (error) {
     console.error("Error handling interaction: ", error);
-    
-    if(error.code === undefined)
-    {
-      console.log("Trying to reconnect to database since it may be in a closed state");
-      await createDbConnection();
-    }
     
     if (error.code === 10062) {
       console.log("Interaction expired before it could be processed.");
