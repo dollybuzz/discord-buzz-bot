@@ -85,17 +85,16 @@ client.on('interactionCreate', async interaction => {
 
       await interaction.reply(`Question of the Week: ${activeQuestion}`);
       console.log(`User interacted with bot. QOTW: ${activeQuestion}`);
-    
-    } else {
-      console.log("Error in database connection.");
-      await interaction.reply({ content: "Error: Database connection is unavailable.", ephemeral: true });
     }
   } catch (error) {
     console.error("Error handling interaction: ", error);
-    console.log("Database connection: ", connection);
-
-    await createDbConnection(); //try connecting to database again if connection is in closed state
-
+    
+    if(error.code === undefined)
+    {
+      console.log("Trying to reconnect to database since it may be in a closed state");
+      await createDbConnection();
+    }
+    
     if (error.code === 10062) {
       console.log("Interaction expired before it could be processed.");
       return;
