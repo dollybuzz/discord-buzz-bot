@@ -29,6 +29,11 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 //Create a database connection
 let connection;
 async function createDbConnection() {
+  if (connection && connection.connection && connection.connection.state !== 'disconnected') {
+    console.log("Database already connected. Using existing connection.");
+    return; // Reuse existing connection
+  }
+  
   try {
     connection = await mysql.createConnection({
       host: process.env.DB_HOST,
